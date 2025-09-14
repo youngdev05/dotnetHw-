@@ -1,18 +1,28 @@
-ASP.NET Core Web API - Управление пользователями
+# ASP.NET Core Web API — Управление пользователями
 
-/UserApi
-  /Controllers
-    UsersController.cs     - контроллер с 4 методами
-  /Models
-    User.cs               - модель пользователя
-  Program.cs              - настройка Swagger
+## Структура проекта
 
-POST /Users/login - авторизация
-POST /Users - создать пользователя
-PUT /Users/{id} - обновить пользователя
-DELETE /Users/{id} - удалить пользователя
+```text
+UserApi
+├── Controllers
+│   └── UsersController.cs   — контроллер с 4 методами
+├── Models
+│   └── User.cs              — модель пользователя
+└── Program.cs               — настройка Swagger
+```
 
-тестовый юзер:
-user id = 1,
-username = user,
-pasword = user
+## Эндпоинты
+
+- **POST** `/Users/login` — авторизация  
+- **POST** `/Users` — создать пользователя  
+- **PUT** `/Users/{id}` — обновить пользователя  
+- **DELETE** `/Users/{id}` — удалить пользователя  
+
+## Тестовый пользователь
+
+```json
+{
+  "userId": 1,
+  "username": "user",
+  "password": "user"
+}
