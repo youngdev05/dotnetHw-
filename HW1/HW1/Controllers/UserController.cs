@@ -1,23 +1,27 @@
 ﻿using HW1.Models;
+using HW1.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HW1.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController: ControllerBase
+public class UserController : ControllerBase
 {
-    private static List<User> Users = new List<User>
-    {
-        new User { Id = 1, Username = "user", Password = "user" }
-    };
+    private readonly IUserService _userService;
 
-    private static int _nextId = 2;
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] UserLoginDto loginDto)
     {
-        var user = Users.FirstOrDefault(u => u.Username == loginDto.Username && u.Password == loginDto.Password);
+        if (string.IsNullOrWhiteSpace(loginDto.Username) || string.IsNullOrWhiteSpace(loginDto.Password))
+            return BadRequest("Логин и пароль обязательны");
+
+        var user = _userService.Login(loginDto);
         if (user == null)
             return Unauthorized("Неверный логин или пароль");
 
@@ -27,48 +31,53 @@ public class UserController: ControllerBase
     [HttpPost]
     public IActionResult CreateUser([FromBody] UserCreateDto userDto)
     {
-        var user = new User
-        {
-            Id = _nextId++,
-            Username = userDto.Username,
-            Password = userDto.Password
-        };
+        if (string.IsNullOrWhiteSpace(userDto.Username) || string.IsNullOrWhiteSpace(userDto.Password))
+            return BadRequest("Имя пользователя и пароль обязательны");
 
-        Users.Add(user);
-        return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+        var createdUser = _userService.CreateUser(userDto);
+        if (createdUser == null)
+            return Conflict("Пользователь с таким логином уже существует");
+
+        return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
     }
 
     [HttpPut("{id}")]
     public IActionResult UpdateUser(int id, [FromBody] UserUpdateDto userDto)
     {
-        var user = Users.FirstOrDefault(u => u.Id == id);
-        if (user == null)
+        if (string.IsNullOrWhiteSpace(userDto.Username) || string.IsNullOrWhiteSpace(userDto.Password))
+            return BadRequest("Имя пользователя и пароль обязательны");
+
+        var updatedUser = _userService.UpdateUser(id, userDto);
+        if (updatedUser == null)
             return NotFound("Пользователь не найден");
 
-        user.Username = userDto.Username;
-        user.Password = userDto.Password;
-
-        return Ok(user);
+        return Ok(updatedUser);
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)
     {
-        var user = Users.FirstOrDefault(u => u.Id == id);
-        if (user == null)
+        var success = _userService.DeleteUser(id);
+        if (!success)
             return NotFound("Пользователь не найден");
 
-        Users.Remove(user);
         return NoContent();
     }
 
     [HttpGet("{id}")]
     public IActionResult GetUserById(int id)
     {
-        var user = Users.FirstOrDefault(u => u.Id == id);
+        var user = _userService.GetUserById(id);
         if (user == null)
             return NotFound();
 
         return Ok(user);
+    }
+
+    [HttpGet]
+    public IActionResult GetUsers([FromQuery] DateTime? from, [FromQuery] DateTime? to)
+    {
+        var users = _userService.GetUsers(from, to);
+        return Ok(users);
     }
 }
