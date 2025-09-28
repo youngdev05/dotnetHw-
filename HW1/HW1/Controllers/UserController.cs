@@ -1,5 +1,4 @@
-﻿using HW1.Models;
-using HW1.Services;
+﻿using HW1.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HW1.Controllers;
@@ -79,5 +78,23 @@ public class UserController : ControllerBase
     {
         var users = _userService.GetUsers(from, to);
         return Ok(users);
+    }
+
+    [HttpGet("stats")]
+    public IActionResult GetUserStatistics([FromQuery] string? gender, [FromQuery] int? skip, [FromQuery] int? take)
+    {
+        var stats = new UserStatistics(_userService.GetUsers(null, null));
+
+        var result = new
+        {
+            MinDate = stats.GetMinRegistrationDate(),
+            MaxDate = stats.GetMaxRegistrationDate(),
+            TotalUsers = stats.GetUserCount(),
+            Sorted = stats.GetSortedUsers(),
+            FilteredByGender = gender != null ? stats.GetUsersByGender(gender) : null,
+            Paged = (skip.HasValue && take.HasValue) ? stats.GetPagedUsers(skip.Value, take.Value) : null
+        };
+
+        return Ok(result);
     }
 }

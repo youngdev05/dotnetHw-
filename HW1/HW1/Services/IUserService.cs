@@ -1,10 +1,13 @@
-﻿namespace HW1.Models;
+﻿using HW1.Models;
 
-public class User
+namespace HW1.Services;
+
+public interface IUserService
 {
-    public int Id { get; set; }
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public DateTime CreatedDate { get; set; }
-    public DateTime UpdatedDate { get; set; }
+    User? Login(UserLoginDto loginDto);
+    User? CreateUser(UserCreateDto userDto);
+    User? UpdateUser(int id, UserUpdateDto userDto);
+    bool DeleteUser(int id);
+    User? GetUserById(int id);
+    IEnumerable<User> GetUsers(DateTime? from, DateTime? to);
 }

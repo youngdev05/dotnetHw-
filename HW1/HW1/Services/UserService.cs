@@ -6,10 +6,14 @@ public class UserService : IUserService
 {
     private static readonly List<User> Users = new()
     {
-        new User { Id = 1, Username = "user", Password = "user", CreatedDate = DateTime.UtcNow, UpdatedDate = DateTime.UtcNow }
+        new User { Id = 1, Username = "user1", Password = "user", Gender = "Male", CreatedDate = new DateTime(2024, 5, 1), UpdatedDate = DateTime.UtcNow },
+        new User { Id = 2, Username = "maria", Password = "123", Gender = "Female", CreatedDate = new DateTime(2024, 5, 3), UpdatedDate = DateTime.UtcNow },
+        new User { Id = 3, Username = "alex", Password = "123", Gender = "Male", CreatedDate = new DateTime(2024, 6, 10), UpdatedDate = DateTime.UtcNow },
+        new User { Id = 4, Username = "olga", Password = "123", Gender = "Female", CreatedDate = new DateTime(2024, 7, 1), UpdatedDate = DateTime.UtcNow },
+        new User { Id = 5, Username = "artem", Password = "123", Gender = "Male", CreatedDate = new DateTime(2024, 8, 20), UpdatedDate = DateTime.UtcNow }
     };
 
-    private static int _nextId = 2;
+    private static int _nextId = 6;
 
     public User? Login(UserLoginDto loginDto)
     {
@@ -26,6 +30,7 @@ public class UserService : IUserService
             Id = _nextId++,
             Username = userDto.Username,
             Password = userDto.Password,
+            Gender = "Unknown",
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow
         };
@@ -74,4 +79,6 @@ public class UserService : IUserService
 
         return query;
     }
+
+    public IEnumerable<User> GetAllUsers() => Users;
 }
