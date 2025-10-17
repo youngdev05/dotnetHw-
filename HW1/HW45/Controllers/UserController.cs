@@ -30,9 +30,8 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult CreateUser([FromBody] UserCreateDto userDto)
     {
-        if (string.IsNullOrWhiteSpace(userDto.Username) || string.IsNullOrWhiteSpace(userDto.Password))
-            return BadRequest("Имя пользователя и пароль обязательны");
-
+        // FluentValidation автоматически проверит данные
+    
         var createdUser = _userService.CreateUser(userDto);
         if (createdUser == null)
             return Conflict("Пользователь с таким логином уже существует");

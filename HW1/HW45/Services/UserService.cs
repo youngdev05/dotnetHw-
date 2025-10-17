@@ -24,7 +24,7 @@ public class UserService : IUserService
     public User? CreateUser(UserCreateDto userDto)
     {
         if (_context.Users.Any(u => 
-            u.Username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
+                u.Username.Equals(userDto.Username, StringComparison.OrdinalIgnoreCase)))
         {
             return null;
         }
@@ -32,7 +32,7 @@ public class UserService : IUserService
         var user = new User
         {
             Username = userDto.Username,
-            Password = userDto.Password,
+            Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
             Gender = "Unknown",
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow

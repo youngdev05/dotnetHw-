@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW1", "HW1\HW1.csproj", "{F43B50FA-FC48-4C76-ABFD-9F5FA3A105B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW4", "HW4\HW4.csproj", "{7DB9C2B2-39D7-4F32-AA9B-707CD60014C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW45", "HW45\HW45.csproj", "{7DB9C2B2-39D7-4F32-AA9B-707CD60014C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
